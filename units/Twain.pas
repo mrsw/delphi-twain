@@ -101,6 +101,28 @@
                                  for 1.9 Specification MLM
   version 1.9  March 2000      Added ICAP_JPEGQUALITY, TWJQ_ values,
                                  updated TWON_PROTOCOLMINOR for Release v1.9 MN
+  version 1.91 August 2007     Added new types and definitions required
+                               for 1.91 Specification MLM
+  version 2.0  Sept 2007       Added new types and definitions required
+                               for 2.0 Specification FHH
+  version 2.0  Mar 2008        Depreciated ICAP_PIXELTYPEs TWPT_SRGB64, TWPT_BGR,
+                               TWPT_CIELAB, TWPT_CIELUV, and TWPT_YCBCR  JMW
+  version 2.0  Mar 2008        Added missing new 2.0 CAP_ definitions JMW
+  version 2.0  Dec 2008        Updated TW_INFO structure for 64bit JMW
+  version 2.1  Mar 2009        Added new types and definitions required
+                               for 2.1 Specification JMW
+  version 2.2  Nov 2010        Added new types and definitions required
+                               for 2.2 Specification MSM
+  version 2.3  Feb 2013        Added new types and definitions required
+                               for 2.3 Specification MLM
+  version 2.3a Apr 2015        Errata fixes to TWCY_ANDORRA and TWCY_CUBA
+  version 2.4  Aug 2015        Added new types and definitions required
+                               for 2.4 Specification MLM
+  version 2.4a June 2016       Added TW_INT32 and TW_UINT32 fixes for Linux,
+                               (I just added this comment today)
+  version 2.4b March 2017      Missing changeset from 2.3 verion (2013/06/20)
+  version 2.5  Jan 2021        Added new types and definitions required
+                               for 2.5 Specification MLM
 
  ======================================================================== }
 
@@ -146,9 +168,9 @@ interface
  *************************************************************************** }
 
 const
-  TWON_PROTOCOLMINOR = 9;    { Changed for Version 1.9 }
+  TWON_PROTOCOLMINOR = 5;    { Changed for Version 2.5 }    // 2021-12-29 Carlo Marona
   {$EXTERNALSYM TWON_PROTOCOLMINOR}
-  TWON_PROTOCOLMAJOR = 1;
+  TWON_PROTOCOLMAJOR = 2;
   {$EXTERNALSYM TWON_PROTOCOLMAJOR}
 
 {***************************************************************************
@@ -1001,6 +1023,8 @@ const
   {$EXTERNALSYM TWTY_STR1024}
   TWTY_UNI512   = $000e;  { Means Item is a TW_UNI512...added 1.9 }
   {$EXTERNALSYM TWTY_UNI512}
+  TWTY_HANDLE   = $000f;  { Added 2.x }   // 2021-12-31 Carlo Marona
+  {$EXTERNALSYM TWTY_HANDLE}
 
 {***************************************************************************
  * Capability Constants                                                    *
@@ -1011,6 +1035,14 @@ const
   {$EXTERNALSYM TWBO_LSBFIRST}
   TWBO_MSBFIRST  = 1;
   {$EXTERNALSYM TWBO_MSBFIRST}
+
+  { Added x.x ? }             // 2021-12-30 Carlo Marona
+{ ICAP_AUTODISCARDBLANKPAGES values }
+  TWBP_DISABLE    = -2;
+  {$EXTERNALSYM TWBP_DISABLE}
+  TWBP_AUTO       = -1;
+  {$EXTERNALSYM TWBP_AUTO}
+
 
 { ICAP_COMPRESSION values (CP_ means ComPression ) }
   TWCP_NONE       = 0;
@@ -1042,28 +1074,56 @@ const
   TWCP_BITFIELDS  = 12;
   {$EXTERNALSYM TWCP_BITFIELDS}
 
+  { Added 2.x ? }         // 2021-12-30 Carlo Marona
+  TWCP_ZIP      = 13;
+  {$EXTERNALSYM TWCP_ZIP}
+  TWCP_JPEG2000 = 14;
+  {$EXTERNALSYM TWCP_JPEG2000}
+
+  { Added 2.x }           // 2021-12-30 Carlo Marona
+  TWCS_BOTH       = 0;
+  {$EXTERNALSYM TWCS_BOTH}
+  TWCS_TOP        = 1;
+  {$EXTERNALSYM TWCS_TOP}
+  TWCS_BOTTOM     = 2;
+  {$EXTERNALSYM TWCS_BOTTOM}
+
 
 { ICAP_IMAGEFILEFORMAT values (FF_means File Format) }
-  TWFF_TIFF    = 0;   { Tagged Image File Format }
+  TWFF_TIFF       = 0;   { Tagged Image File Format }
   {$EXTERNALSYM TWFF_TIFF}
-  TWFF_PICT    = 1;   { Macintosh PICT }
+  TWFF_PICT       = 1;   { Macintosh PICT }
   {$EXTERNALSYM TWFF_PICT}
-  TWFF_BMP     = 2;   { Windows Bitmap }
+  TWFF_BMP        = 2;   { Windows Bitmap }
   {$EXTERNALSYM TWFF_BMP}
-  TWFF_XBM     = 3;   { X-Windows Bitmap }
+  TWFF_XBM        = 3;   { X-Windows Bitmap }
   {$EXTERNALSYM TWFF_XBM}
-  TWFF_JFIF    = 4;   { JPEG File Interchange Format }
+  TWFF_JFIF       = 4;   { JPEG File Interchange Format }
   {$EXTERNALSYM TWFF_JFIF}
-  TWFF_FPX     = 5;   { Flash Pix }
+  TWFF_FPX        = 5;   { Flash Pix }
   {$EXTERNALSYM TWFF_FPX}
-  TWFF_TIFFMULTI= 6;  { Multi-page tiff file }
+  TWFF_TIFFMULTI  = 6;  { Multi-page tiff file }
   {$EXTERNALSYM TWFF_TIFFMULTI}
-  TWFF_PNG     = 7;
+  TWFF_PNG        = 7;
   {$EXTERNALSYM TWFF_PNG}
-  TWFF_SPIFF    = 8;
+  TWFF_SPIFF      = 8;
   {$EXTERNALSYM TWFF_SPIFF}
-  TWFF_EXIF    = 9;
+  TWFF_EXIF       = 9;
   {$EXTERNALSYM TWFF_EXIF}
+  TWFF_PDF        = 10;
+  {$EXTERNALSYM TWFF_PDF}
+  TWFF_JP2        = 11;
+  {$EXTERNALSYM TWFF_JP2}
+  TWFF_JPX        = 13;
+  {$EXTERNALSYM TWFF_JPX}
+  TWFF_DEJAVU     = 14;
+  {$EXTERNALSYM TWFF_DEJAVU}
+  TWFF_PDFA       = 15;            { Added 2.x }     // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWFF_PDFA}
+  TWFF_PDFA2      = 16;            { Added 2.x }     // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWFF_PDFA2}
+  TWFF_PDFRASTER  = 17;            { Added 2.4 }     // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWFF_PDFA2}
 
 
 { ICAP_FILTER values (FT_ means Filter Type) }
@@ -1108,19 +1168,34 @@ const
   TWLS_IR      = 6;
   {$EXTERNALSYM TWLS_IR}
 
+  { Added 2.3 }           // 2021-12-30 Carlo Marona
+{ TWEI_MAGTYPE values }
+  TWMD_MICR     = 0;
+  {$EXTERNALSYM TWMD_MICR}
+  TWMD_RAW      = 1;
+  {$EXTERNALSYM TWMD_RAW}
+  TWMD_INVALID  = 2;
+  {$EXTERNALSYM TWMD_INVALID}
+
 { ICAP_ORIENTATION values (OR_ means ORientation) }
-  TWOR_ROT0     = 0;
+  TWOR_ROT0         = 0;
   {$EXTERNALSYM TWOR_ROT0}
-  TWOR_ROT90    = 1;
+  TWOR_ROT90        = 1;
   {$EXTERNALSYM TWOR_ROT90}
-  TWOR_ROT180   = 2;
+  TWOR_ROT180       = 2;
   {$EXTERNALSYM TWOR_ROT180}
-  TWOR_ROT270   = 3;
+  TWOR_ROT270       = 3;
   {$EXTERNALSYM TWOR_ROT270}
-  TWOR_PORTRAIT = TWOR_ROT0;
+  TWOR_PORTRAIT     = TWOR_ROT0;
   {$EXTERNALSYM TWOR_PORTRAIT}
-  TWOR_LANDSCAPE= TWOR_ROT270;
+  TWOR_LANDSCAPE    = TWOR_ROT270;
   {$EXTERNALSYM TWOR_LANDSCAPE}
+  TWOR_AUTO         = 4;         { Added 2.x }      // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWOR_AUTO}
+  TWOR_AUTOTEXT     = 5;         { Added 2.x }      // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWOR_AUTOTEXT}
+  TWOR_AUTOPICTURE  = 6;         { Added 2.x }      // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWOR_AUTOPICTURE}
 
 { ICAP_PLANARCHUNKY values (PC_ means Planar/Chunky ) }
   TWPC_CHUNKY   = 0;
@@ -1135,26 +1210,151 @@ const
   {$EXTERNALSYM TWPF_VANILLA}
 
 { ICAP_PIXELTYPE values (PT_ means Pixel Type) }
-  TWPT_BW      = 0; { Black and White }
+  TWPT_BW         = 0; { Black and White }
   {$EXTERNALSYM TWPT_BW}
-  TWPT_GRAY    = 1;
+  TWPT_GRAY       = 1;
   {$EXTERNALSYM TWPT_GRAY}
-  TWPT_RGB     = 2;
+  TWPT_RGB        = 2;
   {$EXTERNALSYM TWPT_RGB}
-  TWPT_PALETTE = 3;
+  TWPT_PALETTE    = 3;
   {$EXTERNALSYM TWPT_PALETTE}
-  TWPT_CMY     = 4;
+  TWPT_CMY        = 4;
   {$EXTERNALSYM TWPT_CMY}
-  TWPT_CMYK    = 5;
+  TWPT_CMYK       = 5;
   {$EXTERNALSYM TWPT_CMYK}
-  TWPT_YUV     = 6;
+  TWPT_YUV        = 6;
   {$EXTERNALSYM TWPT_YUV}
-  TWPT_YUVK    = 7;
+  TWPT_YUVK       = 7;
   {$EXTERNALSYM TWPT_YUVK}
-  TWPT_CIEXYZ  = 8;
+  TWPT_CIEXYZ     = 8;
   {$EXTERNALSYM TWPT_CIEXYZ}
-  TWPT_BGR     = 12;
+  TWPT_LAB        = 9;           { Added 2.x }    // 2021-12-27 Carlo Marona
+  {$EXTERNALSYM TWPT_LAB}
+  TWPT_SRGB       = 10;          { Added 2.x }    // 2021-12-27 Carlo Marona
+  {$EXTERNALSYM TWPT_SRGB}
+  TWPT_SCRGB      = 11;          { Added 2.x }    // 2021-12-27 Carlo Marona
+  {$EXTERNALSYM TWPT_SCRGB}
+  TWPT_BGR        = 12;          { Added 2.x }    // 2021-12-27 Carlo Marona (Deprecated)
   {$EXTERNALSYM TWPT_BGR}
+  TWPT_CIELAB     = 13;          { Added 2.x }    // 2021-12-27 Carlo Marona (Deprecated)
+  {$EXTERNALSYM TWPT_CIELAB}
+  TWPT_CIELUV     = 14;          { Added 2.x }    // 2021-12-27 Carlo Marona (Deprecated)
+  {$EXTERNALSYM TWPT_CIELUV}
+  TWPT_YCBCR      = 15;          { Added 2.x }    // 2021-12-27 Carlo Marona (Deprecated)
+  {$EXTERNALSYM TWPT_YCBCR}
+  TWPT_INFRARED   = 16;        { Added 2.x }    // 2021-12-27 Carlo Marona
+  {$EXTERNALSYM TWPT_INFRARED}
+  TWPT_UNKNOWN1   = 17;            // 2021-12-27 Carlo Marona from Samsung CLX-9350 printer
+  TWPT_UNKNOWN2   = 18;            // 2021-12-27 Carlo Marona from Samsung CLX-9350 printer
+  TWPT_UNKNOWN3   = 30;            // 2021-12-27 Carlo Marona from Samsung CLX-9350 printer
+
+
+  { Added 2.x }                 // 2021-12-29 Carlo Marona
+{ CAP_SEGMENTED values }
+  TWSG_NONE      = 0;
+  {$EXTERNALSYM TWSG_NONE}
+  TWSG_AUTO      = 1;
+  {$EXTERNALSYM TWSG_AUTO}
+  TWSG_MANUAL    = 2;
+  {$EXTERNALSYM TWSG_MANUAL}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ ICAP_FILMTYPE values }
+  TWFM_POSITIVE   = 0;
+  {$EXTERNALSYM TWFM_POSITIVE}
+  TWSG_NEGATIVE   = 1;
+  {$EXTERNALSYM TWSG_NEGATIVE}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ CAP_DOUBLEFEEDDETECTION values }
+  TWDF_ULTRASONIC   = 0;
+  {$EXTERNALSYM TWDF_ULTRASONIC}
+  TWSG_BYLENGTH     = 1;
+  {$EXTERNALSYM TWSG_BYLENGTH}
+  TWSG_INFRARED     = 2;
+  {$EXTERNALSYM TWSG_INFRARED}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ CAP_DOUBLEFEEDDETECTIONSENSITIVITY values }
+  TWUS_LOW      = 0;
+  {$EXTERNALSYM TWUS_LOW}
+  TWUS_MEDIUM   = 1;
+  {$EXTERNALSYM TWUS_MEDIUM}
+  TWUS_HIGH     = 2;
+  {$EXTERNALSYM TWUS_HIGH}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ CAP_DOUBLEFEEDDETECTIONRESPONSE values }
+  TWDP_STOP         = 0;
+  {$EXTERNALSYM TWDP_STOP}
+  TWDP_STOPADNWAIT  = 1;
+  {$EXTERNALSYM TWDP_STOPADNWAIT}
+  TWUS_SOUND        = 2;
+  {$EXTERNALSYM TWUS_SOUND}
+  TWUS_DONOTIMPRINT = 3;
+  {$EXTERNALSYM TWUS_DONOTIMPRINT}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ ICAP_MIRROR values }
+  TWMR_NONE         = 0;
+  {$EXTERNALSYM TWMR_NONE}
+  TWMR_VERTICAL  = 1;
+  {$EXTERNALSYM TWMR_VERTICAL}
+  TWMR_HORIZONTAL        = 2;
+  {$EXTERNALSYM TWMR_HORIZONTAL}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ ICAP_JPEGSUBSAMPLING values }
+  TWJS_444YCBCR       = 0;
+  {$EXTERNALSYM TWJS_444YCBCR}
+  TWJS_444RGB         = 1;
+  {$EXTERNALSYM TWJS_444RGB}
+  TWJS_422            = 2;
+  {$EXTERNALSYM TWJS_422}
+  TWJS_421            = 3;
+  {$EXTERNALSYM TWJS_421}
+  TWJS_411            = 4;
+  {$EXTERNALSYM TWJS_411}
+  TWJS_420            = 5;
+  {$EXTERNALSYM TWJS_420}
+  TWJS_410            = 6;
+  {$EXTERNALSYM TWJS_410}
+  TWJS_311            = 7;
+  {$EXTERNALSYM TWJS_311}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ CAP_PAPERHANDLING values }
+  TWPH_NORMAL         = 0;
+  {$EXTERNALSYM TWPH_NORMAL}
+  TWPH_FRAGILE        = 1;
+  {$EXTERNALSYM TWPH_FRAGILE}
+  TWPH_THICK          = 3;
+  {$EXTERNALSYM TWPH_THICK}
+  TWPH_TRIFOLD        = 4;
+  {$EXTERNALSYM TWPH_TRIFOLD}
+  TWPH_PHOTOGRAPH     = 5;
+  {$EXTERNALSYM TWPH_PHOTOGRAPH}
+
+
+  { Added 2.x }                 // 2021-12-30 Carlo Marona
+{ CAP_INDICATORSMODE values }
+  TWCI_INFO         = 0;
+  {$EXTERNALSYM TWCI_INFO}
+  TWCI_WARNING      = 1;
+  {$EXTERNALSYM TWCI_WARNING}
+  TWCI_ERROR        = 2;
+  {$EXTERNALSYM TWCI_ERROR}
+  TWCI_WARMUP       = 3;
+  {$EXTERNALSYM TWCI_WARMUP}
+
+
 
 { ICAP_SUPPORTEDSIZES values (SS_ means Supported Sizes) }
   TWSS_NONE      = 0;
@@ -1279,16 +1479,20 @@ const
   {$EXTERNALSYM TWSS_USSTATEMENT}
   TWSS_BUSINESSCARD= 53;
   {$EXTERNALSYM TWSS_BUSINESSCARD}
+  TWSS_MAXSIZE     = 54;     { Added 2.1 }      // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWSS_BUSINESSCARD}
 
 { ICAP_XFERMECH values (SX_ means Setup XFer) }
-  TWSX_NATIVE  = 0;
+  TWSX_NATIVE   = 0;
   {$EXTERNALSYM TWSX_NATIVE}
-  TWSX_FILE    = 1;
+  TWSX_FILE     = 1;
   {$EXTERNALSYM TWSX_FILE}
-  TWSX_MEMORY  = 2;
+  TWSX_MEMORY   = 2;
   {$EXTERNALSYM TWSX_MEMORY}
-  TWSX_FILE2  = 3;               { added 1.9 }
+  TWSX_FILE2    = 3;               { added 1.9 }
   {$EXTERNALSYM TWSX_FILE2}
+  TWSX_MEMFILE  = 4;               { Added 2.X }  // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWSX_MEMFILE}
 
 { ICAP_UNITS values (UN_ means UNits) }
   TWUN_INCHES      = 0;
@@ -1303,6 +1507,8 @@ const
   {$EXTERNALSYM TWUN_TWIPS}
   TWUN_PIXELS      = 5;
   {$EXTERNALSYM TWUN_PIXELS}
+  TWUN_MILLIMETERS = 6;          { Added 2.x }    //2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWUN_MILLIMETERS}
 
 { Added 1.5 }
 { ICAP_BITDEPTHREDUCTION values (BR_ means Bitdepth Reduction) }
@@ -1314,6 +1520,8 @@ const
   {$EXTERNALSYM TWBR_CUSTHALFTONE}
   TWBR_DIFFUSION    = 3;
   {$EXTERNALSYM TWBR_DIFFUSION}
+  TWBR_DYNAMICTHRESHOLD  = 4;     { Added 2.2 }     // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWBR_DYNAMICTHRESHOLD}
 
 { Added 1.7 }
 { ICAP_DUPLEX values }
@@ -1368,6 +1576,9 @@ const
   {$EXTERNALSYM TWBT_CODABARWITHSTARTSTOP}
   TWBT_MAXICODE          = 19;
   {$EXTERNALSYM TWBT_MAXICODE}
+
+  TWBT_QRCODE            = 20;  { Added 2.2 }     // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWBT_QRCODE}
 
 { Added 1.7 }
 { TWEI_DESKEWSTATUS values }
@@ -1508,11 +1719,55 @@ const
   TWFA_RIGHT  = 3;
   {$EXTERNALSYM TWFA_RIGHT}
 
+  { Added x.x ? }         // 2021-12-30 Carlo Marona
+{ ICAP_FEEDERTYPE values }
+  TWFE_GENERAL  = 0;
+  {$EXTERNALSYM TWFE_GENERAL}
+  TWFE_PHOTO    = 1;
+  {$EXTERNALSYM TWFE_PHOTO}
+
 { CAP_FEEDERORDER values (FO_ means feeder order) }
   TWFO_FIRSTPAGEFIRST = 0;
   {$EXTERNALSYM TWFO_FIRSTPAGEFIRST}
   TWFO_LASTPAGEFIRST  = 1;
   {$EXTERNALSYM TWFO_LASTPAGEFIRST}
+
+  { Added 2.x }           // 2021-12-30 Carlo Marona
+{ CAP_FEEDERPOCKET values }
+  TWFP_POCKETERROR    = 0;
+  {$EXTERNALSYM TWFP_POCKETERROR}
+  TWFP_POCKET1        = 1;
+  {$EXTERNALSYM TWFP_POCKET1}
+  TWFP_POCKET2        = 2;
+  {$EXTERNALSYM TWFP_POCKET2}
+  TWFP_POCKET3        = 3;
+  {$EXTERNALSYM TWFP_POCKET3}
+  TWFP_POCKET4        = 4;
+  {$EXTERNALSYM TWFP_POCKET4}
+  TWFP_POCKET5        = 5;
+  {$EXTERNALSYM TWFP_POCKET5}
+  TWFP_POCKET6        = 6;
+  {$EXTERNALSYM TWFP_POCKET6}
+  TWFP_POCKET7        = 7;
+  {$EXTERNALSYM TWFP_POCKET7}
+  TWFP_POCKET8        = 8;
+  {$EXTERNALSYM TWFP_POCKET8}
+  TWFP_POCKET9        = 9;
+  {$EXTERNALSYM TWFP_POCKET9}
+  TWFP_POCKET10       = 10;
+  {$EXTERNALSYM TWFP_POCKET10}
+  TWFP_POCKET11       = 11;
+  {$EXTERNALSYM TWFP_POCKET11}
+  TWFP_POCKET12       = 12;
+  {$EXTERNALSYM TWFP_POCKET12}
+  TWFP_POCKET13       = 13;
+  {$EXTERNALSYM TWFP_POCKET13}
+  TWFP_POCKET14       = 14;
+  {$EXTERNALSYM TWFP_POCKET14}
+  TWFP_POCKET15       = 15;
+  {$EXTERNALSYM TWFP_POCKET15}
+  TWFP_POCKET16       = 16;
+  {$EXTERNALSYM TWFP_POCKET16}
 
 { CAP_FILESYSTEM values (FS_ means file system) }
   TWFS_FILESYSTEM      = 0;
@@ -1544,6 +1799,37 @@ const
   TWPR_ENDORSERBOTTOMAFTER   = 7;
   {$EXTERNALSYM TWPR_ENDORSERBOTTOMAFTER}
 
+  { Added 2.3 }               // 2021-12-30 Carlo Marona
+{ CAP_PRINTERFONTSTYLE values }
+  TWPF_NORMAL         = 0;
+  {$EXTERNALSYM TWPF_NORMAL}
+  TWPF_BOLD           = 1;
+  {$EXTERNALSYM TWPF_BOLD}
+  TWPF_ITALIC         = 2;
+  {$EXTERNALSYM TWPF_ITALIC}
+  TWPF_LARGESIZE      = 3;
+  {$EXTERNALSYM TWPF_LARGESIZE}
+  TWPF_SMALLSIZE      = 4;
+  {$EXTERNALSYM TWPF_SMALLSIZE}
+
+  { Added 2.3 }               // 2021-12-30 Carlo Marona
+{ CAP_PRINTERINDEXTRIGGER values }
+  TWCT_PAGE           = 0;
+  {$EXTERNALSYM TWCT_PAGE}
+  TWCT_PATCH1         = 1;
+  {$EXTERNALSYM TWCT_PATCH1}
+  TWCT_PATCH2           = 2;
+  {$EXTERNALSYM TWCT_PATCH2}
+  TWCT_PATCH3           = 3;
+  {$EXTERNALSYM TWCT_PATCH3}
+  TWCT_PATCH4           = 4;
+  {$EXTERNALSYM TWCT_PATCH4}
+  TWCT_PATCHT           = 5;
+  {$EXTERNALSYM TWCT_PATCHT}
+  TWCT_PATCH6           = 6;
+  {$EXTERNALSYM TWCT_PATCH6}
+
+
 { CAP_PRINTERMODE values (PM_ means printer mode) }
   TWPM_SINGLESTRING   = 0;
   {$EXTERNALSYM TWPM_SINGLESTRING}
@@ -1551,6 +1837,8 @@ const
   {$EXTERNALSYM TWPM_MULTISTRING}
   TWPM_COMPOUNDSTRING = 2;
   {$EXTERNALSYM TWPM_COMPOUNDSTRING}
+  TWPM_IMAGEADDRESSSTRING = 3;      { Added 2.5 }     // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWPM_IMAGEADDRESSSTRING}
 
 { ICAP_BARCODESEARCHMODE values (TWBD_ means search) }
   TWBD_HORZ     = 0;
@@ -1596,6 +1884,19 @@ const
   TWIF_FINELINE= TWIF_HIGHPASS;
   {$EXTERNALSYM TWIF_FINELINE}
 
+  { Added 2.x }             // 2021-12-30 Carlo Marona
+{ ICAP_IMAGEMERGE values }
+  TWIM_NONE           = 0;
+  {$EXTERNALSYM TWIM_NONE}
+  TWIM_FRONTONTOP     = 1;
+  {$EXTERNALSYM TWIM_FRONTONTOP}
+  TWIM_FRONTONBOTTOM  = 2;
+  {$EXTERNALSYM TWIM_FRONTONBOTTOM}
+  TWIM_FRONTONLEFT    = 3;
+  {$EXTERNALSYM TWIM_FRONTONLEFT}
+  TWIM_FRONTONRIGHT   = 4;
+  {$EXTERNALSYM TWIM_FRONTONRIGHT}
+
 { ICAP_NOISEFILTER values (NF_ means noise filter) }
   TWNF_NONE         = 0;
   {$EXTERNALSYM TWNF_NONE}
@@ -1637,6 +1938,32 @@ const
   {$EXTERNALSYM TWFY_IMAGE}
   TWFY_UNKNOWN       = 8;
   {$EXTERNALSYM TWFY_UNKNOWN}
+
+  { Added 2.5 }           // 2021-12-30 Carlo Marona
+{ AP_IAFIELD*_LEVEL values }
+  TWIA_UNUSED        = 0;
+  {$EXTERNALSYM TWIA_UNUSED}
+  TWIA_FIXED         = 1;
+  {$EXTERNALSYM TWIA_FIXED}
+  TWIA_LEVEL1        = 2;
+  {$EXTERNALSYM TWIA_LEVEL1}
+  TWIA_LEVEL2        = 3;
+  {$EXTERNALSYM TWIA_LEVEL2}
+  TWIA_LEVEL3        = 4;
+  {$EXTERNALSYM TWIA_LEVEL3}
+  TWIA_LEVEL4        = 5;
+  {$EXTERNALSYM TWIA_LEVEL4}
+
+
+  { Added 2.x }           // 2021-12-30 Carlo Marona
+{ ICAP_ICCPROFILE values }
+  TWIC_NONE          = 0;
+  {$EXTERNALSYM TWIC_NONE}
+  TWIC_LINK          = 1;
+  {$EXTERNALSYM TWIC_LINK}
+  TWIC_EMBED         = 2;
+  {$EXTERNALSYM TWIC_EMBED}
+
 
   { ICAP_JPEGQUALITY values (JQ_ means jpeg quality) }
   TWJQ_UNKNOWN       = -4;
@@ -2426,6 +2753,19 @@ const
   DG_AUDIO      = $0004; { data pertaining to audio }
   {$EXTERNALSYM DG_AUDIO}
 
+
+{ More Data Functionality may be added in the future.
+ * These are for items that need to be determined before DS is opened.
+ * NOTE: Supported Functionality constants must be powers of 2 as they are
+ *       used as bitflags when Application asks DSM to present a list of DSs.
+ *       to support backward capability the App and DS will not use the fields
+  }
+  DF_DSM2       = $10000000;
+  DF_APP2       = $20000000;
+  DF_DS2        = $40000000;
+
+  DG_MASK       = $FFFF;
+
 {***************************************************************************
  * Data Argument Types                                                     *
  *************************************************************************** }
@@ -2483,6 +2823,18 @@ const
   DAT_PASSTHRU        = $000f; { TW_PASSTHRU }
   {$EXTERNALSYM DAT_PASSTHRU}
 
+  { Added 2.0 }       // 2021-12-29 Carlo Marona
+  DAT_CALLBACK        = $0010;
+  {$EXTERNALSYM DAT_CALLBACK}
+  DAT_STATUSUTF8      = $0011;
+  {$EXTERNALSYM DAT_STATUSUTF8}
+  DAT_CALLBACK2       = $0012;
+  {$EXTERNALSYM DAT_CALLBACK2}
+  DAT_METRICS         = $0013;
+  {$EXTERNALSYM DAT_METRICS}
+  DAT_TWAINDIRECT     = $0014;
+  {$EXTERNALSYM DAT_TWAINDIRECT}
+
 { Data Argument Types for the DG_IMAGE Data Group. }
   DAT_IMAGEINFO       = $0101; { TW_IMAGEINFO }
   {$EXTERNALSYM DAT_IMAGEINFO}
@@ -2506,6 +2858,18 @@ const
   {$EXTERNALSYM DAT_PALETTE8}
   DAT_EXTIMAGEINFO    = $010b; { TW_EXTIMAGEINFO -- for 1.7 Spec. }
   {$EXTERNALSYM DAT_EXTIMAGEINFO}
+
+  { Added 2.0 }                 // 2021-12-29 Carlo Marona
+  DAT_FILTER    = $010c;
+  {$EXTERNALSYM DAT_FILTER}
+
+  { Misplaced ? }
+  DAT_ICCPROFILE        = $0401;
+  {$EXTERNALSYM DAT_ICCPROFILE}
+  DAT_IMAGEMEMFILEXFER  = $0402;
+  {$EXTERNALSYM DAT_IMAGEMEMFILEXFER}
+  DAT_ENTRYPOINT        = $0403;
+  {$EXTERNALSYM DAT_ENTRYPOINT}
 
 { Added 1.8 }
 { Data Argument Types for the DG_AUDIO Data Group. }
@@ -2549,6 +2913,16 @@ const
   {$EXTERNALSYM MSG_RESET}
   MSG_QUERYSUPPORT      = $0008; { Get supported operations on the cap. }
   {$EXTERNALSYM MSG_QUERYSUPPORT}
+
+  { Added 2.0 }               // 2021-12-29 Carlo Marona
+  MSG_GETHELP           = $0009;
+  {$EXTERNALSYM MSG_GETHELP}
+  MSG_GETLABEL          = $000A;
+  {$EXTERNALSYM MSG_GETLABEL}
+  MSG_GETLABELENUM      = $000B;
+  {$EXTERNALSYM MSG_GETLABELENUM}
+  MSG_SETCONSTRAINT     = $000C;
+  {$EXTERNALSYM MSG_SETCONSTRAINT}
 
 { Messages used with DAT_NULL }
   MSG_XFERREADY         = $0101; { The data source has data ready }
@@ -2625,6 +2999,22 @@ const
 { Messages used with a pointer to a DAT_PASSTHRU structure }
   MSG_PASSTHRU     = $0901;
   {$EXTERNALSYM MSG_PASSTHRU}
+
+  { Added 2.0 }                 // 2021-12-29 Carlo Marona
+
+{ Messages used with DAT_CALLBACK }
+  MSG_REGISTER_CALLBACK     = $0902;
+  {$EXTERNALSYM MSG_REGISTER_CALLBACK}
+
+{ Messages used with DAT_CAPABILITY }
+  MSG_RESETALL              = $0A01;
+  {$EXTERNALSYM MSG_RESETALL}
+
+{ Messages used with DAT_TWAINDIRECT }
+  MSG_SETTASK               = $0B01;
+  {$EXTERNALSYM MSG_SETTASK}
+
+
 
 {***************************************************************************
  * Capabilities                                                            *
@@ -2744,6 +3134,107 @@ const
   {$EXTERNALSYM CAP_BATTERYMINUTES}
   CAP_BATTERYPERCENTAGE            = $1033;  { Added 1.8 }
   {$EXTERNALSYM CAP_BATTERYPERCENTAGE}
+  CAP_CAMERASIDE                          = $1034;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_CAMERASIDE}
+  CAP_SEGMENTED                           = $1035;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_SEGMENTED}
+  CAP_CAMERAENABLED                       = $1036;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_CAMERAENABLED}
+  CAP_CAMERAORDER                         = $1037;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_CAMERAORDER}
+  CAP_MICRENABLED                         = $1038;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_MICRENABLED}
+  CAP_FEEDERPREP                          = $1039;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_FEEDERPREP}
+  CAP_FEEDERPOCKET                        = $103A;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_FEEDERPOCKET}
+  CAP_AUTOMATICSENSEMEDIUM                = $103B;  { Added 2.1 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_AUTOMATICSENSEMEDIUM}
+  CAP_CUSTOMINTERFACEGUID                 = $103C;  { Added 2.1 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_CUSTOMINTERFACEGUID}
+  CAP_SUPPORTEDCAPSSEGMENTUNIQUE          = $103D;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_SUPPORTEDCAPSSEGMENTUNIQUE}
+  CAP_SUPPORTEDDATS                       = $103E;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_SUPPORTEDDATS}
+  CAP_DOUBLEFEEDDETECTION                 = $103F;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_DOUBLEFEEDDETECTION}
+  CAP_DOUBLEFEEDDETECTIONLENGTH           = $1040;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_DOUBLEFEEDDETECTIONLENGTH}
+  CAP_DOUBLEFEEDDETECTIONSENSITIVITY      = $1041;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_DOUBLEFEEDDETECTIONSENSITIVITY}
+  CAP_DOUBLEFEEDDETECTIONRESPONSE         = $1042;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_DOUBLEFEEDDETECTIONRESPONSE}
+  CAP_PAPERHANDLING                       = $1043;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_PAPERHANDLING}
+  CAP_INDICATORSMODE                      = $1044;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_INDICATORSMODE}
+  CAP_PRINTERVERTICALOFFSET               = $1045;  { Added 2.2 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERVERTICALOFFSET}
+  CAP_POWERSAVETIME                       = $1046;  { Added 2.0 }                         // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM CAP_POWERSAVETIME}
+  CAP_PRINTERCHARROTATION                 = $1047;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERCHARROTATION}
+  CAP_PRINTERFONTSTYLE                    = $1048;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERFONTSTYLE}
+  CAP_PRINTERINDEXLEADCHAR                = $1049;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERINDEXLEADCHAR}
+  CAP_PRINTERINDEXMAXVALUE                = $104A;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERINDEXMAXVALUE}
+  CAP_PRINTERINDEXNUMDIGITS               = $104B;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERINDEXNUMDIGITS}
+  CAP_PRINTERINDEXSTEP                    = $104C;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERINDEXSTEP}
+  CAP_PRINTERINDEXTRIGGER                 = $104D;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERINDEXTRIGGER}
+  CAP_PRINTERSTRINGPREVIEW                = $104E;  { Added 2.3 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_PRINTERSTRINGPREVIEW}
+  CAP_SHEETCOUNT                          = $104F;  { Added 2.4 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_SHEETCOUNT}
+  CAP_IMAGEADDRESSENABLED                 = $1050;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IMAGEADDRESSENABLED}
+  CAP_IAFIELDA_LEVEL                      = $1051;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDA_LEVEL}
+  CAP_IAFIELDB_LEVEL                      = $1052;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDB_LEVEL}
+  CAP_IAFIELDC_LEVEL                      = $1053;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDC_LEVEL}
+  CAP_IAFIELDD_LEVEL                      = $1054;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDD_LEVEL}
+  CAP_IAFIELDE_LEVEL                      = $1055;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDE_LEVEL}
+  CAP_IAFIELDA_PRINTFORMAT                = $1056;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDA_PRINTFORMAT}
+  CAP_IAFIELDB_PRINTFORMAT                = $1057;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDB_PRINTFORMAT}
+  CAP_IAFIELDC_PRINTFORMAT                = $1058;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDC_PRINTFORMAT}
+  CAP_IAFIELDD_PRINTFORMAT                = $1059;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDD_PRINTFORMAT}
+  CAP_IAFIELDE_PRINTFORMAT                = $105A;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDE_PRINTFORMAT}
+  CAP_IAFIELDA_VALUE                      = $105B;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDA_VALUE}
+  CAP_IAFIELDB_VALUE                      = $105C;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDB_VALUE}
+  CAP_IAFIELDC_VALUE                      = $105D;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDC_VALUE}
+  CAP_IAFIELDD_VALUE                      = $105E;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDD_VALUE}
+  CAP_IAFIELDE_VALUE                      = $105F;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDE_VALUE}
+  CAP_IAFIELDA_LASTPAGE                   = $1060;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDA_LASTPAGE}
+  CAP_IAFIELDB_LASTPAGE                   = $1061;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDB_LASTPAGE}
+  CAP_IAFIELDC_LASTPAGE                   = $1062;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDC_LASTPAGE}
+  CAP_IAFIELDD_LASTPAGE                   = $1063;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDD_LASTPAGE}
+  CAP_IAFIELDE_LASTPAGE                   = $1064;  { Added 2.5 }                         // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM CAP_IAFIELDE_LASTPAGE}
+
+
+
 
 { image data sources MAY support these caps }
   ICAP_AUTOBRIGHT                  = $1100;
@@ -2884,8 +3375,35 @@ const
   {$EXTERNALSYM ICAP_AUTOMATICROTATE}
   ICAP_JPEGQUALITY                 = $1153; { Added 1.9 }
   {$EXTERNALSYM ICAP_JPEGQUALITY}
-  ICAP_AUTOSIZE                    = $1156; { Added 2.2 (?) }
+  ICAP_FEEDERTYPE                  = $1154; { Added 2.0 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_FEEDERTYPE}
+  ICAP_ICCPROFILE                  = $1155; { Added 2.0 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_ICCPROFILE}
+  ICAP_AUTOSIZE                    = $1156; { Added 2.1 }   // 2021-12-29 Carlo Marona: fixed source version
   {$EXTERNALSYM ICAP_AUTOSIZE}
+  ICAP_AUTOMATICCROPUSESFRAME      = $1157; { Added 2.1 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_AUTOMATICCROPUSESFRAME}
+  ICAP_AUTOMATICLENGTHDETECTION    = $1158; { Added 2.1 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_AUTOMATICLENGTHDETECTION}
+  ICAP_AUTOMATICCOLORENABLED       = $1159; { Added 2.1 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_AUTOMATICCOLORENABLED}
+  ICAP_AUTOMATICCOLORNONCOLORPIXELTYPE = $115A; { Added 2.1 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_AUTOMATICCOLORNONCOLORPIXELTYPE}
+  ICAP_COLORMANAGEMENTENABLED      = $115B; { Added 2.1 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_COLORMANAGEMENTENABLED}
+  ICAP_IMAGEMERGE                  = $115C; { Added 2.0 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_IMAGEMERGE}
+  ICAP_IMAGEMERGEHEIGHTTHRESHOLD   = $115D; { Added 2.0 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_IMAGEMERGEHEIGHTTHRESHOLD}
+  ICAP_SUPPORTEDEXTIMAGEINFO       = $115E; { Added 2.1 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_SUPPORTEDEXTIMAGEINFO}
+  ICAP_FILMTYPE                    = $115F; { Added 2.2 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_FILMTYPE}
+  ICAP_MIRROR                      = $1160; { Added 2.2 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_MIRROR}
+  ICAP_JPEGSUBSAMPLING             = $1161; { Added 2.2 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM ICAP_JPEGSUBSAMPLING}
+
 
 { image data sources MAY support these audio caps }
   ACAP_AUDIOFILEFORMAT             = $1201; { Added 1.8 }
@@ -3028,6 +3546,49 @@ const
   TWEI_PIXELFLAVOR       = $123F; { added 1.9 }
   {$EXTERNALSYM TWEI_PIXELFLAVOR}
 
+  TWEI_ICCPROFILE           = $1240; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_ICCPROFILE}
+  TWEI_LASTSEGMENT          = $1241; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_LASTSEGMENT}
+  TWEI_SEGMENTNUMBER        = $1242; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_SEGMENTNUMBER}
+  TWEI_MAGDATA              = $1243; { Added 2.1 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_MAGDATA}
+  TWEI_MAGTYPE              = $1244; { Added 2.1 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_MAGTYPE}
+  TWEI_PAGESIDE             = $1245; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_PAGESIDE}
+  TWEI_FILESYSTEMSOURCE     = $1246; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_FILESYSTEMSOURCE}
+  TWEI_IMAGEMERGED          = $1247; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_IMAGEMERGED}
+  TWEI_MAGDATALENGTH        = $1248; { Added 2.1 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_MAGDATALENGTH}
+  TWEI_PAPERCOUNT           = $1249; { Added 2.2 }    // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWEI_PAPERCOUNT}
+  TWEI_PRINTERTEXT          = $124A; { Added 2.3 }    // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWEI_PRINTERTEXT}
+  TWEI_TWAINDIRECTMETADATA  = $124B; { Added 2.4 }    // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWEI_TWAINDIRECTMETADATA}
+  TWEI_IAFIELDA_VALUE       = $124C; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_IAFIELDA_VALUE}
+  TWEI_IAFIELDB_VALUE       = $124D; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_IAFIELDB_VALUE}
+  TWEI_IAFIELDC_VALUE       = $124E; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_IAFIELDC_VALUE}
+  TWEI_IAFIELDD_VALUE       = $124F; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_IAFIELDD_VALUE}
+  TWEI_IAFIELDE_VALUE       = $1250; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_IAFIELDE_VALUE}
+  TWEI_IALEVEL              = $1251; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_IALEVEL}
+  TWEI_PRINTER              = $1252; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_PRINTER}
+  TWEI_BARCODETEXT2         = $1253; { Added 2.0 }    // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWEI_BARCODETEXT2}
+
+
+
   TWEJ_NONE           = $0000;
   {$EXTERNALSYM TWEJ_NONE}
   TWEJ_MIDSEPARATOR   = $0001;
@@ -3080,6 +3641,12 @@ const
   {$EXTERNALSYM TWRC_INFONOTSUPPORTED}
   TWRC_DATANOTAVAILABLE =  9;
   {$EXTERNALSYM TWRC_DATANOTAVAILABLE}
+  TWRC_BUSY             =  10;       { Added 2.2 }     // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWRC_BUSY}
+  TWRC_SCANNERLOCKED    =  11;       { Added 2.2 }     // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWRC_SCANNERLOCKED}
+
+
 
 { Condition Codes: Application gets these by doing DG_CONTROL DAT_STATUS MSG_GET. }
   TWCC_CUSTOMBASE     = $8000;
@@ -3132,6 +3699,19 @@ const
   TWCC_CHECKDEVICEONLINE =  23; { The device went offline prior to or during this operation }
   {$EXTERNALSYM TWCC_CHECKDEVICEONLINE}
 
+  TWCC_INTERLOCK         =  24;   { Added 2.0 }      // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWCC_INTERLOCK}
+  TWCC_DAMAGEDCORNER     =  25;   { Added 2.0 }      // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWCC_DAMAGEDCORNER}
+  TWCC_FOCUSERROR        =  26;   { Added 2.0 }      // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWCC_FOCUSERROR}
+  TWCC_DOCTOOLIGHT       =  27;   { Added 2.0 }      // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWCC_DOCTOOLIGHT}
+  TWCC_DOCTOODARK        =  28;   { Added 2.0 }      // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWCC_DOCTOODARK}
+  TWCC_NOMEDIA           =  29;   { Added 2.1 }      // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWCC_NOMEDIA}
+
 
 { bit patterns: for query the operation that are supported by the data source on a capability }
 { Application gets these through DG_CONTROL/DAT_CAPABILITY/MSG_QUERYSUPPORT }
@@ -3146,6 +3726,19 @@ const
   {$EXTERNALSYM TWQC_GETCURRENT}
   TWQC_RESET      = $0010;
   {$EXTERNALSYM TWQC_RESET}
+  TWQC_SETCONSTRAINT  = $0020;    { Added 2.2 }   // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWQC_SETCONSTRAINT}
+  TWQC_CONSTRAINABLE  = $0040;    { Added 2.2 }   // 2021-12-30 Carlo Marona
+  {$EXTERNALSYM TWQC_CONSTRAINABLE}
+  TWQC_GETHELP        = $0100;    { Added 2.0 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWQC_GETHELP}
+  TWQC_GETLABEL       = $0200;    { Added 2.0 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWQC_GETLABEL}
+  TWQC_GETLABELENUM   = $0400;    { Added 2.0 }   // 2021-12-29 Carlo Marona
+  {$EXTERNALSYM TWQC_GETLABELENUM}
+
+
+
 
 {***************************************************************************
  * Entry Points                                                            *
@@ -3233,6 +3826,82 @@ type
 
 var
   DS_Entry: TDSEntryProc = nil;
+
+
+  { Added 2.0 }       // 2021-12-29 Carlo Marona
+type
+  TWAIN_CALLBACKPROC = function(pOrigin: pTW_IDENTITY; pDest: pTW_IDENTITY; DG: TW_UINT32; DAT: TW_UINT16;
+    MSG: TW_UINT16; pData: TW_MEMREF): TW_UINT16; stdcall;
+  {$EXTERNALSYM TWAIN_CALLBACKPROC}
+
+  TTwainCallbackProc = TWAIN_CALLBACKPROC;
+
+  DSM_MEMALLOCATEPROC = function(pSize: TW_UINT32): TW_HANDLE; stdcall;
+  {$EXTERNALSYM DSM_MEMALLOCATEPROC}
+
+  TDSMMemAllocateProc = DSM_MEMALLOCATEPROC;
+
+  DSM_MEMFREEPROC = procedure(pMemHandle: TW_HANDLE); stdcall;
+  {$EXTERNALSYM DSM_MEMFREEPROC}
+
+  TDSMMemFreeProc = DSM_MEMFREEPROC;
+
+  DSM_MEMLOCKPROC = function(pMemHandle: TW_HANDLE): TW_MEMREF; stdcall;
+  {$EXTERNALSYM DSM_MEMLOCKPROC}
+
+  TDSMMemLockProc = DSM_MEMLOCKPROC;
+
+  DSM_MEMUNLOCKPROC = procedure(pMemHandle: TW_HANDLE); stdcall;
+  {$EXTERNALSYM DSM_MEMUNLOCKPROC}
+
+  TDSMMemUnLockProc = DSM_MEMUNLOCKPROC;
+
+
+  { DAT_ENTRYPOINT. returns essential entry points. }
+type
+  TW_ENTRYPOINT = packed record
+   Size: TW_UINT32;
+   DSM_Entry: DSMENTRYPROC;
+   DSM_MemAllocate: DSM_MEMALLOCATEPROC;
+   DSM_MemFree: DSM_MEMFREEPROC;
+   DSM_MemLock: DSM_MEMLOCKPROC;
+   DSM_MemUnlock: DSM_MEMUNLOCKPROC;
+  end;
+  {$EXTERNALSYM TW_ENTRYPOINT}
+
+  pTW_ENTRYPOINT = ^TW_ENTRYPOINT;
+  {$EXTERNALSYM pTW_ENTRYPOINT}
+
+
+  { DAT_FILTER }
+  TW_FILTER_DESCRIPTOR = packed record
+    Size: TW_UINT32;
+    HueStart: TW_UINT32;
+    HueEnd: TW_UINT32;
+    SaturationStart: TW_UINT32;
+    SaturationEnd: TW_UINT32;
+    ValueStart: TW_UINT32;
+    ValueEnd: TW_UINT32;
+    Replacement: TW_UINT32;
+  end;
+  {$EXTERNALSYM TW_FILTER_DESCRIPTOR}
+
+  pTW_FILTER_DESCRIPTOR = ^TW_FILTER_DESCRIPTOR;
+  {$EXTERNALSYM pTW_FILTER_DESCRIPTOR}
+
+
+  { DAT_FILTER }
+  TW_FILTER = packed record
+    Size: TW_UINT32;
+    DescriptorCount: TW_UINT32;
+    MaxDescriptorCount: TW_UINT32;
+    Condition: TW_UINT32;
+    hDescriptors: TW_HANDLE;
+  end;
+  {$EXTERNALSYM TW_FILTER}
+
+  pTW_FILTER = ^TW_FILTER;
+  {$EXTERNALSYM pTW_FILTER}
 
 implementation
 
